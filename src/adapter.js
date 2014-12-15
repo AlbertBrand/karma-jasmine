@@ -160,6 +160,13 @@ var createStartFn = function(tc, jasmineEnvPassedIn) {
     // in production we ask for it lazily, so that adapter can be loaded even before jasmine
     var jasmineEnv = jasmineEnvPassedIn || window.jasmine.getEnv();
 
+    if(config.args.length === 1) {
+      var specGrepPattern = new RegExp(config.args[0]);
+      jasmineEnv.specFilter = function(spec) {
+        return specGrepPattern.test(spec.getFullName());
+      };
+    }
+
     jasmineEnv.addReporter(new KarmaReporter(tc));
     jasmineEnv.execute();
   };
